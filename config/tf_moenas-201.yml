@@ -1,0 +1,59 @@
+exp_name: '[NSGA2-Baseline201]'
+
+algorithm:
+  name: nsga2
+  kwargs:
+    pop_size: 50
+    n_offsprings: 50
+
+operators:
+  sampling:
+    name: int_random
+    kwargs: {}
+
+  crossover:
+    name: int_ux
+    kwargs:
+      prob: .9
+    
+  mutation:
+    name: int_pm
+    kwargs:
+      prob: .2
+  
+eliminate_duplicates:
+  name: duplicate.TSSDuplicateElimination
+  kwargs:
+    isomorphic: true
+
+problem:
+  name: problem.EfficiencyExpressivityTrainability201
+  kwargs:
+    search_space: tss
+    dataset: cifar10-valid
+    efficiency: 'flops'
+
+    pf_path: data/bench_pf/[cifar10-tss][FLOPS-TEST_ERR]-200EP.npy
+    pf_dict:
+      hp: '200'
+      dataset: 'cifar10'
+      iepoch: 199
+
+    lr_ntk_cfg:
+      seed: 0
+      num_workers: 4
+      root: ~/.torch
+      dataset: cifar10
+
+      lr:
+        input_size: [1000, 1, 3, 3]
+        sample_batch: 3
+        n_repeats: 3
+      ntk:
+        batch_size: 16
+        n_repeats: 3
+
+termination:
+  name: n_eval
+  kwargs:
+    n_max_evals: 3000

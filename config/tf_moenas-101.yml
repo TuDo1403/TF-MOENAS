@@ -1,0 +1,66 @@
+exp_name: '[NSGA2-TF101]'
+
+algorithm:
+  name: nsga2
+  kwargs:
+    pop_size: 50
+    n_offsprings: 50
+
+operators:
+  sampling:
+    name: int_random
+    kwargs: {}
+
+  crossover:
+    name: int_ux
+    kwargs:
+      prob: .9
+    
+  mutation:
+    name: int_pm
+    kwargs:
+      prob: .2
+  
+eliminate_duplicates: true
+
+repair: repair.Bench101Repair
+
+problem:
+  name: problem.EfficiencyExpressivityTrainability101
+  kwargs:
+    net_cfg:
+      input_size: [1, 3, 32, 32]
+      num_labels: 10
+      in_channels: 3
+      stem_out_channels: 128
+      num_stack: 3
+      num_modules_per_stack: 3
+      use_stem: true
+
+    epoch: 36
+
+    path: "~/.torch/nasbench_only108.tfrecord"
+
+    efficiency: flops
+    
+    lr_ntk_cfg:
+      seed: 0
+      num_workers: 4
+      root: ~/.torch
+      dataset: cifar10
+
+      lr:
+        input_size: [1000, 1, 4, 4]
+        sample_batch: 3
+        n_repeats: 3
+      ntk:
+        batch_size: 16
+        n_repeats: 3
+
+    pf_path: data/bench_pf/[cifar10-101][FLOPS-TEST_ERR]-108EP.npy
+    pf_benchmark: data/bench101_info.pth.tar
+
+termination:
+  name: n_eval
+  kwargs:
+    n_max_evals: 5000

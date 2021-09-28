@@ -1,0 +1,11 @@
+matplotlib>=3.3.4
+numpy>=1.19.5
+tensorboardX>=2.1
+tensorflow>=1.12.0
+torch>=1.8.0
+torchvision>=0.9.0
+easydict>=1.9
+nats_bench>=1.4
+pymoo>=0.5.0
+lightgbm
+IPython
