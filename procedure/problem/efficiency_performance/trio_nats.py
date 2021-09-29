@@ -65,10 +65,10 @@ class EfficiencyExpressivityTrainability201(base.NATS):
         with torch.no_grad():
             for _ in range(self.lr_ntk_cfg['lr']['n_repeats']):
                 network = init_model(network, method='kaiming_norm_fanin')
-                self.lrc_model.reinit([network])
-                lr = self.lrc_model.forward_batch_sample()
+                self.lr_counter.reinit([network])
+                lr = self.lr_counter.forward_batch_sample()
                 LR += lr
-                self.lrc_model.clear()
+                self.lr_counter.clear()
 
         torch.cuda.empty_cache()
         return LR

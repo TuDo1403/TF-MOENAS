@@ -2,6 +2,8 @@ import torch
 
 import logging
 
+import pickle5 as pickle
+
 class CallbackBase:
     def __init__(self, verbose=True) -> None:
         super().__init__()
@@ -128,6 +130,9 @@ class NonDominatedProgress(CallbackBase):
 from pymoo.indicators.igd import IGD
 from pymoo.indicators.hv import Hypervolume
 
+# from pymoo.performance_indicator.igd import IGD
+# from pymoo.performance_indicator.hv import Hypervolume
+
 import pandas as pd
 
 class PerformanceMonitor(CallbackBase):
@@ -159,20 +164,11 @@ class PerformanceMonitor(CallbackBase):
             'top_k': self.top_lst
         }
         return str(info)
+
     
-    def _after_next(self, reverse, **kwargs):
-        if self.convert_to_pf_space:
-            if self.from_archive:
-                X = self.algorithm.problem.elitist_archive.get('X')
-            else:
-                X = self.algorithm.opt.get('X')
-            F = self.algorithm.problem._convert_to_pf_space(X)
-        else:
-            if self.from_archive:
-                F = self.algorithm.problem.elitist_archive.get('F')
-            else:
-                F = self.algorithm.opt.get('F')
+    def _after_next(self, F, reverse, **kwargs):
         score = self.monitor.do(F)
+        # score = self.monitor.calc(F)
         self.current_score = score
         self.top_lst += [score]
         self.top_lst = list(set(self.top_lst))
@@ -216,6 +212,20 @@ class PerformanceMonitor(CallbackBase):
         df.to_csv(os.path.join(self.agent.config.out_dir, '{}.csv'.format(self.metric)))
         return msg
 
+    def _calc_F(self):
+        if self.convert_to_pf_space:
+            if self.from_archive:
+                X = self.algorithm.problem.elitist_archive.get('X')
+            else:
+                X = self.algorithm.opt.get('X')
+            F = self.algorithm.problem._convert_to_pf_space(X)
+        else:
+            if self.from_archive:
+                F = self.algorithm.problem.elitist_archive.get('F')
+            else:
+                F = self.algorithm.opt.get('F')
+        return F
+
 
 class IGDMonitor(PerformanceMonitor):
     def __init__(self,**kwargs) -> None:
@@ -224,10 +234,11 @@ class IGDMonitor(PerformanceMonitor):
     def _begin_fit(self,**kwargs):
         super()._begin_fit(**kwargs)
         pf = self.algorithm.problem.pareto_front()
-        self.monitor = eval(self.metric)(pf=pf, normalize=self.normalize)
+        self.monitor = eval(self.metric)(pf=pf, zero_to_one=self.normalize)
 
     def _after_next(self, **kwargs):
-        return super()._after_next(reverse=False, **kwargs)
+        F = self._calc_F()
+        return super()._after_next(F=F, reverse=False, **kwargs)
 
 
 class HyperVolumeMonitor(PerformanceMonitor):
@@ -237,13 +248,20 @@ class HyperVolumeMonitor(PerformanceMonitor):
     
     def _begin_fit(self,**kwargs):
         super()._begin_fit(**kwargs)
-        pf = None
-        if self.normalize:
-            pf = self.algorithm.problem.pareto_front()
-        self.monitor = eval(self.metric)(ref_point=self.ref_point, pf=pf, normalize=self.normalize)
+        
 
     def _after_next(self, **kwargs):
-        return super()._after_next(reverse=True, **kwargs)
+        F = self._calc_F()
+        approx_ideal = F.min(axis=0)
+        approx_nadir = F.max(axis=0)
+        self.monitor = eval(self.metric)(
+            ref_point=self.ref_point, 
+            norm_ref_point=False, 
+            zero_to_one=self.normalize,
+            ideal=approx_ideal,
+            nadir=approx_nadir
+        )
+        return super()._after_next(F=F, reverse=True, **kwargs)
 
             
 class TimeLogger(CallbackBase):
@@ -294,6 +312,7 @@ class CheckpointSaver(CallbackBase):
                 self.agent.cfg.checkpoint_dir,
                 filepath
             ),
+            pickle_module=pickle,
             pickle_protocol=5
         )
 

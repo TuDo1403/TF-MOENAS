@@ -87,8 +87,8 @@ class EfficiencyExpressivityTrainability101(base.Bench101):
             }
         ).loaders['train']
 
-        if self.pf_space_dict_path:
-            self.pf_space_dict = torch.load(self.pf_space_dict_path)
+        if self.pf_benchmark_path:
+            self.pf_benchmark = torch.load(self.pf_benchmark_path)
 
 
     def __calc_ntk(self, network):
@@ -108,10 +108,10 @@ class EfficiencyExpressivityTrainability101(base.Bench101):
         with torch.no_grad():
             for _ in range(self.lr_ntk_cfg['lr']['n_repeats']):
                 network = init_model(network, method='kaiming_norm_fanin')
-                self.lrc_model.reinit([network])
-                lr = self.lrc_model.forward_batch_sample()
+                self.lr_counter.reinit([network])
+                lr = self.lr_counter.forward_batch_sample()
                 LR += lr
-                self.lrc_model.clear()
+                self.lr_counter.clear()
 
         torch.cuda.empty_cache()
         return LR
@@ -129,12 +129,12 @@ class EfficiencyExpressivityTrainability101(base.Bench101):
             flops, n_params = get_model_infos(network_ori, self.net_cfg.input_size)
             efficiency = eval(self.efficiency)
         else:
-            efficiency = self.api.query(spec, epochs=self.epoch)
+            efficiency = self.api.query(spec, epochs=self.epoch)[self.efficiency]
 
         net_config_for_ntk = self.net_cfg.copy()
         net_config_for_ntk.stem_out_channels = 16
         
-        network = Network(spec, **net_config_for_ntk)
+        network = Network(spec, **net_config_for_ntk).cuda()
         network_thin = Network(
             spec, 
             in_channels=1, 

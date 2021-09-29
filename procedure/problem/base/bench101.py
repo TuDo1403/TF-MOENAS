@@ -39,9 +39,10 @@ class Bench101(base.NAS):
         self.net_cfg = net_cfg
         self.epoch = epoch
 
+        self.path = path
         if '~' in path:
-            path = os.path.join(expanduser('~'), path[2:])
-        self.api = NASBench(path)
+            self.path = os.path.join(expanduser('~'), path[2:])
+        self.api = NASBench(self.path)
 
 
     def __getstate__(self):
@@ -51,7 +52,7 @@ class Bench101(base.NAS):
 
     def __setstate__(self, state_dict):
         self.__dict__ = state_dict
-        self.api = NASBench(path)
+        self.api = NASBench(self.path)
 
     def _decode(self, x):
         dag, ops = np.split(x, [self.EDGE_SPOTS])

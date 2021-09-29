@@ -42,7 +42,7 @@ problem:
     path: "~/.torch/nasbench_full.tfrecord"
 
     efficiency: flops
-    performance: validation-accuracy
+    performance: validation_accuracy
 
     pf_path: data/bench_pf/[cifar10-101][FLOPS-TEST_ERR]-108EP.npy
     pf_benchmark: data/bench101_info.pth.tar

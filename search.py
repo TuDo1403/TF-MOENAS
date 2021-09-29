@@ -22,8 +22,8 @@ def cli(config, seed, summary_writer, console_log):
 
     callbacks = [
         NonDominatedProgress(plot_pf=False, labels=['Floating-point operations (M)', 'Error rate (%)']),
-        IGDMonitor(normalize=True, from_archive=True, convert_to_pf_space=True),
-        HyperVolumeMonitor(normalize=True, from_archive=True, convert_to_pf_space=True, ref_point=[1e5, 100.]),
+        IGDMonitor(normalize=True, from_archive=True, convert_to_pf_space=True, topk=5),
+        HyperVolumeMonitor(normalize=True, topk=5, from_archive=True, convert_to_pf_space=True, ref_point=[1.1, 1.1]),
         CheckpointSaver(),
         TimeLogger()
     ]
@@ -37,6 +37,6 @@ def cli(config, seed, summary_writer, console_log):
     agent.solve()
 
 if __name__ == '__main__':
-    cli(['-cfg', 'config/baseline_moenas-101.yml'])
+    cli(['-cfg', 'config/baseline_moenas-201.yml'])
 
     

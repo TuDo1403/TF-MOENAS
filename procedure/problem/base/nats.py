@@ -38,12 +38,6 @@ class NATS(base.NAS):
 
         super().__init__(
             filter_duplicate_by_key=False, 
-            path=path,
-            search_space=search_space,
-            dataset=dataset,
-            epoch=epoch,
-            hp=hp,
-            trial_idx=trial_idx,
             n_var=n_var,
             xl=xl,
             xu=xu,

@@ -3,6 +3,9 @@ import pymoo.factory as factory
 from pymoo.core.repair import NoRepair
 from pymoo.core.duplicate import NoDuplicateElimination, DefaultDuplicateElimination
 
+# from pymoo.model.repair import NoRepair
+# from pymoo.model.duplicate import NoDuplicateElimination, DefaultDuplicateElimination
+
 from optimizer.EA.base import AgentBase
 
 import torch
