@@ -9,21 +9,24 @@ from tensorboardX import SummaryWriter
 
 @click.command()
 @click.option('--config', '-cfg', required=True)
-@click.option('--seed', '-s', default=0, type=int)
+@click.option('--seed', '-s', default=-1, type=int)
 @click.option('--summary_writer', '-sw', default=True, type=bool)
 @click.option('--console_log', default=True, type=bool)
+@click.option("--loops_if_rand", type=int, default=30, help="Total runs for evaluation.")
+@click.option('--population size', '-p', default=50, type=int)
+@click.option('--n_evals', default=3000, type=int)
 def cli(config, seed, summary_writer, console_log):
     cfg = load_cfg(config, seed, console_log)
-
-    if summary_writer:
-        summary_writer = SummaryWriter(cfg.summary_dir)
-    else:
-        summary_writer = None
+    summary_writer = SummaryWriter(cfg.summary_dir) if summary_writer else None
 
     callbacks = [
         NonDominatedProgress(plot_pf=False, labels=['Floating-point operations (M)', 'Error rate (%)']),
-        IGDMonitor(normalize=True, from_archive=True, convert_to_pf_space=True, topk=5),
-        HyperVolumeMonitor(normalize=True, topk=5, from_archive=True, convert_to_pf_space=True, ref_point=[1.1, 1.1]),
+        IGDMonitor(
+            normalize=True, 
+            from_archive=True, 
+            convert_to_pf_space=True, 
+            topk=5
+        ),
         CheckpointSaver(),
         TimeLogger()
     ]
@@ -37,6 +40,6 @@ def cli(config, seed, summary_writer, console_log):
     agent.solve()
 
 if __name__ == '__main__':
-    cli(['-cfg', 'config/baseline_moenas-201.yml'])
+    cli()
 
     
