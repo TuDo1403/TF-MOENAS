@@ -22,8 +22,6 @@ class NATS(base.NAS):
                  dataset,
                  path=None,
                  epoch=12,
-                 hp='12',
-                 trial_idx=0,
                  **kwargs):
 
         ss = self.SS[search_space]
@@ -44,9 +42,7 @@ class NATS(base.NAS):
             **kwargs
         )
 
-        self.trial_idx = trial_idx
         self.epoch = epoch
-        self.hp = hp
         self.dataset = dataset
 
         self.path = path

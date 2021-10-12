@@ -18,6 +18,8 @@ import torch
 
 import numpy as np
 
+from copy import deepcopy
+
 
 class EfficiencyExpressivityTrainability201(base.NATS):
     def __init__(self, efficiency, lr_ntk_cfg, **kwargs):
@@ -78,7 +80,7 @@ class EfficiencyExpressivityTrainability201(base.NATS):
         cfg = self.api.get_net_config(idx, self.dataset)
         cfg.update({'use_stem': True})
         
-        cfg_thin = cfg.copy()
+        cfg_thin = deepcopy(cfg)
         cfg_thin.update({
             'C': 1,
             'use_stem': False

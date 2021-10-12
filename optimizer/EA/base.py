@@ -18,17 +18,21 @@ class AgentBase(ABC):
     ### Public Method ###
     def solve(self, **kwargs):
         try:
-            self._initialize(**kwargs)
-            self.callback_handler.begin_fit(agent=self, **kwargs)   
-            while self.model.has_next():
-                self.callback_handler.begin_next(**kwargs)
-                self.model.next()
-                self.callback_handler.after_next(**kwargs)
-            self._finalize(**kwargs)
+            self.run(**kwargs)
         except KeyboardInterrupt:
             self.logger.info("Interrupted. You have entered CTRL+C...")
         except Exception as e:
             self.logger.error(e, exc_info=True)
+
+    def run(self, **kwargs):
+        self._initialize(**kwargs)
+        self.callback_handler.begin_fit(agent=self, **kwargs)   
+        while self.model.has_next():
+            self.callback_handler.begin_next(**kwargs)
+            self.model.next()
+            self.callback_handler.after_next(**kwargs)
+        self._finalize(**kwargs)
+
     ### Public Method ###
 
     ### Virtual Methods ###

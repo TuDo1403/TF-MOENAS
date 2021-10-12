@@ -18,6 +18,8 @@ import numpy as np
 
 import time
 
+from copy import deepcopy
+
 
 class EfficiencyExpressivityTrainability101(base.Bench101):
     def __init__(self,
@@ -131,7 +133,7 @@ class EfficiencyExpressivityTrainability101(base.Bench101):
         else:
             efficiency = self.api.query(spec, epochs=self.epoch)[self.efficiency]
 
-        net_config_for_ntk = self.net_cfg.copy()
+        net_config_for_ntk = deepcopy(self.net_cfg)
         net_config_for_ntk.stem_out_channels = 16
         
         network = Network(spec, **net_config_for_ntk).cuda()

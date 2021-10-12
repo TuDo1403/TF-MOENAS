@@ -11,14 +11,12 @@ import numpy as np
 class EfficiencyAccuracy101(base.Bench101):
     def __init__(self, 
                  efficiency, 
-                 performance, 
                  pf_benchmark=None, 
                  **kwargs):
         super().__init__(n_obj=2, **kwargs)
 
-        self.performance = performance
         self.efficiency = efficiency
-        self.msg += efficiency + '={:.3f}, ' + performance + '={:.3f}'
+        self.msg += efficiency + '={:.3f}, ' + 'validation_accuracy' + '={:.3f}'
         self.pf_benchmark_path = pf_benchmark
         self.pf_benchmark = None
         if self.pf_benchmark_path:
@@ -39,7 +37,7 @@ class EfficiencyAccuracy101(base.Bench101):
         matrix, ops = genotype
         spec = ModelSpec(matrix, ops)
 
-        err = (1 - self.api.query(spec, epochs=self.epoch)[self.performance]) * 100 
+        err = (1 - self.api.query(spec, epochs=self.epoch)['validation_accuracy']) * 100 
         network = Network(spec, self.net_cfg.num_labels)
         if self.efficiency == 'flops' or self.efficiency == 'n_params':
             flops, n_params = get_model_infos(network, self.net_cfg.input_size)

@@ -35,9 +35,7 @@ problem:
 
     pf_path: data/bench_pf/[cifar10-tss][FLOPS-TEST_ERR]-200EP.npy
     pf_dict:
-      hp: '200'
       dataset: 'cifar10'
-      iepoch: 199
 
     lr_ntk_cfg:
       seed: 0

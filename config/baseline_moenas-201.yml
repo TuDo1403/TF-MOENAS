@@ -30,17 +30,13 @@ problem:
   name: problem.EfficiencyAccuracyNATS
   kwargs:
     search_space: tss
-    dataset: cifar10-valid
-    hp: '200'
+    dataset: cifar10
     epoch: 24
-    performance: 'valid-accuracy'
     efficiency: 'flops'
 
     pf_path: data/bench_pf/[cifar10-tss][FLOPS-TEST_ERR]-200EP.npy
     pf_dict:
-      hp: '200'
       dataset: 'cifar10'
-      iepoch: 199
 
 termination:
   name: n_eval
