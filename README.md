@@ -1,4 +1,4 @@
-# Training-Free Multi-Objective Evolutionary Neural Architecture Search via Neural TangentKernel and Number of Linear Regions
+# Training-Free Multi-Objective Evolutionary Neural Architecture Search via Neural Tangent Kernel and Number of Linear Regions
 
 [![MIT licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
 
