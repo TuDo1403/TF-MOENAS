@@ -1,4 +1,4 @@
-# Training-Free Multi-Objective EvolutionaryNeural Architecture Search via Neural TangentKernel and Number of Linear Regions
+# Training-Free Multi-Objective Evolutionary Neural Architecture Search via Neural TangentKernel and Number of Linear Regions
 
 [![MIT licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
 
@@ -53,6 +53,7 @@ python search.py --cfg config/tf_moenas-201.yml --n_evals 3000 --population_size
 ```
 
 To evaluate IGD score on pre-computed optimal front during the search, simply provide `--eval_igd` flag.
+
 For customized search, additional configurations can be modified through yaml config files in `config` folder.
 
 ## Acknowledgement
