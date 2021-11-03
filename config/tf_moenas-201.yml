@@ -1,4 +1,4 @@
-exp_name: '[NSGA2-Baseline201]'
+exp_name: '[NSGA2-TF201]'
 
 algorithm:
   name: nsga2
