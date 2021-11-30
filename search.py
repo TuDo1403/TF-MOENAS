@@ -75,6 +75,6 @@ def setup_agent(config, seed, summary_writer, pop_size, n_evals, use_archive, ev
     return agent
 
 if __name__ == '__main__':
-    cli(['-cfg', 'config/tf_moenas-201.yml', '--n_evals', '3000', '--pop_size', '50', '--loops_if_rand', '30', '-sw', '--use_archive'])
+    cli()
 
     
