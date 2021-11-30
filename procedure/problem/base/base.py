@@ -3,7 +3,6 @@ from abc import abstractmethod
 from typing import OrderedDict
 
 from pymoo.core.problem import ElementwiseProblem
-# from pymoo.model.problem import Problem
 
 from util.MOEA.elitist_archive import ElitistArchive
 
@@ -12,7 +11,6 @@ import numpy as np
 import logging
 
 
-# class NAS(Problem):
 class NAS(ElementwiseProblem):
     def __init__(self, 
                  pf_dict=None,
@@ -29,7 +27,7 @@ class NAS(ElementwiseProblem):
             'runtime': OrderedDict()
         })
         self.archive = {}
-        self.elitist_archive = ElitistArchive(self.archive, filter_duplicate_by_key)
+        self.elitist_archive = ElitistArchive(self.archive, verbose, filter_duplicate_by_key=filter_duplicate_by_key)
         self.msg = '[{:0>2d}/{:0>2d}]: time={:.3f}s, '
         self.counter = 0
         self.pf_path = pf_path

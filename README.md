@@ -36,20 +36,20 @@ pip install -r requirements.txt
 
 ```shell
 # Baseline MOENAS
-python search.py --cfg config/baseline_moenas-101.yml --n_evals 5000 --pop_size 50 --loops_if_rand 30 -sw --use_archive
+python search.py -cfg config/baseline_moenas-101.yml --n_evals 5000 --pop_size 50 --loops_if_rand 30 -sw --use_archive
 
 # Training-free MOENAS
-python search.py --cfg config/tf_moenas-101.yml --n_evals 5000 --pop_size 50 --loops_if_rand 30 -sw --use_archive
+python search.py -cfg config/tf_moenas-101.yml --n_evals 5000 --pop_size 50 --loops_if_rand 30 -sw --use_archive
 ```
 
 #### [NAS-Bench-201](https://github.com/D-X-Y/AutoDL-Projects/blob/master/docs/NAS-Bench-201.md)
 
 ```shell
 # Baseline MOENAS
-python search.py --cfg config/baseline_moenas-201.yml --n_evals 3000 --population_size 50 --loops_if_rand 30 -sw --use_archive
+python search.py -cfg config/baseline_moenas-201.yml --n_evals 3000 --pop_size 50 --loops_if_rand 30 -sw --use_archive
 
 # Training-free MOENAS
-python search.py --cfg config/tf_moenas-201.yml --n_evals 3000 --population_size 50 --loops_if_rand 30 -sw --use_archive
+python search.py -cfg config/tf_moenas-201.yml --n_evals 3000 --pop_size 50 --loops_if_rand 30 -sw --use_archive
 ```
 
 To evaluate IGD score on pre-computed optimal front during the search, simply provide `--eval_igd` flag.

@@ -9,23 +9,6 @@ class EfficiencyAccuracyNATS(base.NATS):
         self.efficiency = efficiency
 
     def _calc_F(self, genotype, **kwargs):
-        #idx = self.api.query_index_by_arch(genotype)
-        #efficiency = self.api.get_cost_info(idx, self.dataset, hp=self.api.full_train_epochs)[self.efficiency]
-        #data = self.api.query_by_index(idx, self.dataset, hp=self.api.full_train_epochs)
-        #trial = list(data.keys())[self.trial_idx]
-        #data_trial = data[trial]
-        #runtime = sum([data_trial.get_train(i)['cur_time'] for i in range(self.epoch+1)])
-
-        # accuracy = self.api.get_more_info(
-        #     idx,
-        #     self.dataset,
-        #     self.epoch,
-        #     self.hp
-        # )[self.performance]
-
-        # error = 100 - accuracy
-        # F = [efficiency, error]
-        # return F, runtime
         accuracy, latency, _, runtime = self.api.simulate_train_eval(
             genotype, self.dataset, iepoch=self.epoch, hp=self.api.full_train_epochs
         )

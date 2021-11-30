@@ -10,7 +10,7 @@ from tensorboardX import SummaryWriter
 from copy import deepcopy
 
 @click.command()
-@click.option('--config', '-cfg', required=True, hep='Provide the config files.')
+@click.option('--config', '-cfg', required=True, help='Provide the config files.')
 @click.option('--summary_writer', '-sw', is_flag=True, help='Use summary writer to log graphs.')
 @click.option('--console_log', is_flag=True, help='Log output to the console.')
 @click.option("--loops_if_rand", type=int, default=10, help="Total runs for evaluation.")
@@ -75,6 +75,6 @@ def setup_agent(config, seed, summary_writer, pop_size, n_evals, use_archive, ev
     return agent
 
 if __name__ == '__main__':
-    cli()
+    cli(['-cfg', 'config/tf_moenas-201.yml', '--n_evals', '3000', '--pop_size', '50', '--loops_if_rand', '30', '-sw', '--use_archive'])
 
     
